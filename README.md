@@ -176,11 +176,10 @@ One workaround used during this lab was:
 
   sudo nmcli connection modify "Wired connection 1" ipv4.dad-timeout 0
 
-![Kali ping failure](Kali_network_error.png)
+<img width="740" height="395" alt="3-kali-error png" src="https://github.com/user-attachments/assets/c89720fc-39b9-4bb6-837a-f7aa57eef94b" />
 
 The network connection was then restarted/rebooted and connectivity was tested again.
 
-![Kali ping failure](Kali_error_solved.png)
 
 **One Important point which I learned:** When a ping to a name fails, test with an IP address too. If the IP works but the name does not, the problem is DNS and not the network connection itself.
 
