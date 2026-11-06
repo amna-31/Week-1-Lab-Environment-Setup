@@ -51,18 +51,17 @@ The goal of this first project is to get the lab running and confirm that every 
                  NAT Network  (10.0.0.0/24)
                  Gateway: 10.0.0.1
                           |
-     ---------------------------------------------------
-     |                |                |               |
- Kali Linux      Windows 10 #1    Windows 10 #2    Android VM
- 10.0.0.2        10.0.0.3         10.0.0.4         10.0.0.5
+     ------------------------------------
+     |                |                |              
+ Kali Linux      Windows 10     Android VM    
+ 10.0.0.2        10.0.0.3         10.0.0.5         
  (static)
 ```
 
 | Machine | IP address | Network adapter | How it was set |
 |---------|------------|-----------------|----------------|
 | Kali Linux 2026.1 | 10.0.0.2 | NAT Network: NatNetwork | Static, set manually |
-| Windows 10 (VM 1) | 10.0.0.3 | NAT Network: NatNetwork1 | Received from the network |
-| Windows 10 (VM 2) | 10.0.0.4 | NAT Network: NatNetwork1 | Received from the network |
+| Windows 10 | 10.0.0.4 | NAT Network: NatNetwork1 | Received from the network |
 | Android VM | 10.0.0.5 | Virtual Wi-Fi (VirtWifi) | Received from the network |
 
 ---
@@ -71,13 +70,12 @@ The goal of this first project is to get the lab running and confirm that every 
 
 | Item | Value |
 |------|-------|
-| Host operating system | [YOUR HOST OS] |
-| Host RAM | [YOUR HOST RAM] |
-| Host processor | [YOUR PROCESSOR] |
-| Hypervisor | VirtualBox [YOUR VERSION] |
+| Host operating system | Windows 11 Pro |
+| Host RAM | 16.0 GB |
+| Host processor | Intel Core i5 |
+| Hypervisor | VirtualBox 7.2.4] |
 | Attacker machine | Kali Linux 2026.1 (VirtualBox image, amd64) |
-| RAM given to Kali | [YOUR KALI RAM] |
-| Target machines | Windows 10 (two VMs), Android (one VM) |
+| Target machines | Windows 10, Android |
 | Network type | NAT Network |
 | Network range | 10.0.0.0/24 |
 | Gateway | 10.0.0.1 |
@@ -98,7 +96,7 @@ In VirtualBox, I created a NAT Network that uses the 10.0.0.0/24 range, with 10.
 
 I chose a NAT Network instead of plain NAT because machines on a NAT Network can talk to each other and still reach the internet. A plain NAT adapter keeps every VM isolated from the others, which is not what a multi-machine lab needs.
 
-### Step 3: Import Kali Linux and Attach It to the Network
+### Step 3: Import Kali Linux and Attach it to the Network
 
 I downloaded the ready-made Kali Linux VirtualBox image (version 2026.1) from the official Kali website, extracted it, and opened it in VirtualBox.
 
@@ -107,7 +105,7 @@ In the VM settings, under Network, Adapter 1 was set like this:
 ```
 Enable Network Adapter: ticked
 Attached to:            NAT Network
-Name:                   NatNetwork
+Name:                   NatNetwork1
 Adapter Type:           Intel PRO/1000 MT Desktop (82540EM)
 Promiscuous Mode:       Allow All
 Virtual Cable Connected: ticked
@@ -143,13 +141,9 @@ After saving the settings, I pinged google.com from the Kali terminal. The name 
 
 I created the target VMs and connected them to the same 10.0.0.0/24 network.
 
-**Windows 10 (VM 1):** attached to NatNetwork1, received 10.0.0.3. I ran `ipconfig` and then pinged google.com to confirm internet access.
+**Windows 10 :** attached to NatNetwork1, received 10.0.0.4 with 10.0.0.1 as the gateway.
 
 ![Windows 10 VM 1](windows_10_config.png)
-
-**Windows 10 (VM 2):** attached to NatNetwork1, received 10.0.0.4.
-
-![Windows 10 VM 2](Windows10.png)
 
 **Android VM:** connected through the virtual Wi-Fi network (VirtWifi), received 10.0.0.5 with 10.0.0.1 as the gateway.
 
@@ -162,9 +156,7 @@ I created the target VMs and connected them to the same 10.0.0.0/24 network.
 | Machine | Check | Result |
 |---------|-------|--------|
 | Kali Linux | `ping google.com` | Name resolved to 142.250.200.174, replies received (4 of 5 packets) |
-| Windows 10 (VM 1) | `ipconfig` | IPv4 10.0.0.3, mask 255.255.255.0, gateway 10.0.0.1 |
-| Windows 10 (VM 1) | `ping google.com` | Name resolved to 142.251.37.142, 3 of 3 replies, 0% loss |
-| Windows 10 (VM 2) | `ipconfig` | IPv4 10.0.0.4, mask 255.255.255.0, gateway 10.0.0.1 |
+| Windows 10 | `ipconfig` | IPv4 10.0.0.4, mask 255.255.255.0, gateway 10.0.0.1 |
 | Android VM | Network details | IP 10.0.0.5, gateway 10.0.0.1 |
 
 ---
@@ -173,19 +165,19 @@ I created the target VMs and connected them to the same 10.0.0.0/24 network.
 
 ### Problem 1: No internet by name after setting a static IP on Kali
 
-**What happened:** After I set the manual IP address, pinging google.com from Kali failed with a "Temporary failure" error. This error means the name could not be resolved. At that time the DNS server field was set to 10.0.0.1, the gateway address.
+After manually configuring the IPv4 settings, Internet connectivity may fail depending on the Kali/NetworkManager configuration.
+
+One workaround used during this lab was:
+
+  sudo nmcli connection modify "Wired connection 1" ipv4.dad-timeout 0
 
 ![Kali ping failure](Kali_network_error.png)
 
-**How I fixed it:** I changed the DNS server in the Kali connection settings from 10.0.0.1 to 8.8.8.8 (Google's public DNS) and saved. After that, google.com resolved and the ping worked (see Step 5).
+The network connection was then restarted/rebooted and connectivity was tested again.
 
-**Lesson:** When a ping to a name fails, test with an IP address too. If the IP works but the name does not, the problem is DNS and not the network connection itself.
+![Kali ping failure](Kali_error_solved.png)
 
-### Problem 2: `ifconfig` is not recognized on Windows
-
-**What happened:** On the Windows 10 VM, I typed `ifconfig` in PowerShell, which I normally use on Linux. PowerShell returned a "not recognized" error.
-
-**How I fixed it:** Windows uses `ipconfig` instead. Running `ipconfig` displayed the IPv4 address, subnet mask and gateway as expected.
+**One Important point which I learned:** When a ping to a name fails, test with an IP address too. If the IP works but the name does not, the problem is DNS and not the network connection itself.
 
 ---
 
@@ -225,8 +217,8 @@ This lab is for learning only. I will test only systems I own or have permission
 
 ## Author
 
-**[YOUR FULL NAME]**
-[YOUR BATCH / ID]
-LinkedIn: [YOUR LINKEDIN URL]
+**AMNA ZAFAR**
+Cybersecurity Internee: B084E
+LinkedIn: www.linkedin.com/in/aamnazafar-ali
 
 Program: Cybersecurity at Networkwalks | Week: 01 | Project: Cybersecurity and Pentesting Lab Setup
