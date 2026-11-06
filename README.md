@@ -60,7 +60,7 @@ The goal of this first project is to get the lab running and confirm that every 
 
 | Machine | IP address | Network adapter | How it was set |
 |---------|------------|-----------------|----------------|
-| Kali Linux 2026.1 | 10.0.0.2 | NAT Network: NatNetwork | Static, set manually |
+| Kali Linux 2026.1 | 10.0.0.2 | NAT Network: NatNetwork1 | Static, set manually |
 | Windows 10 | 10.0.0.4 | NAT Network: NatNetwork1 | Received from the network |
 | Android VM | 10.0.0.5 | Virtual Wi-Fi (VirtWifi) | Received from the network |
 
