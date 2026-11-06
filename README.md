@@ -113,7 +113,8 @@ Virtual Cable Connected: ticked
 
 Promiscuous Mode was set to Allow All so that Kali can see traffic on the virtual network, which is needed later for packet analysis.
 
-![Kali IPv4 settings](2-kali-settings.png)
+<img width="577" height="385" alt="1-kali-adapter" src="https://github.com/user-attachments/assets/01fc06c5-9b62-42cf-bbe5-5d9e293558cc" />
+
 
 ### Step 4: Set a Fixed IP Address on Kali
 
