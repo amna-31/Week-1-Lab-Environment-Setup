@@ -130,13 +130,15 @@ DNS:      8.8.8.8
 
 A fixed address makes the lab easier to document and means I can always find the Kali machine at the same address.
 
-![Kali IPv4 settings](Kali_network_settings.png)
+<img width="740" height="395" alt="3-kali-error png" src="https://github.com/user-attachments/assets/84d3272b-1de8-4095-8fbd-1c7806f634b9" />
+
 
 ### Step 5: Test Kali's Connection
 
 After saving the settings, I pinged google.com from the Kali terminal. The name resolved and replies came back, which confirmed that the gateway, internet access and DNS all work.
 
-![Kali ping test](Kali_network_working.png)
+<img width="875" height="406" alt="4-kali-working png" src="https://github.com/user-attachments/assets/595625f4-bfb9-4955-9c3b-7b1670280e8d" />
+
 
 ### Step 6: Add the Target Machines
 
@@ -144,11 +146,13 @@ I created the target VMs and connected them to the same 10.0.0.0/24 network.
 
 **Windows 10 :** attached to NatNetwork1, received 10.0.0.4 with 10.0.0.1 as the gateway.
 
-![Windows 10 (windows_10_config.png)
+<img width="926" height="382" alt="5-windows10 png" src="https://github.com/user-attachments/assets/4e8bc457-eb5a-43af-8e68-2dc59c0f1cab" />
+
 
 **Android VM:** connected through the virtual Wi-Fi network (VirtWifi), received 10.0.0.5 with 10.0.0.1 as the gateway.
 
-![Android network details](Android_network_settings.png)
+<img width="509" height="380" alt="6-android png" src="https://github.com/user-attachments/assets/b5518364-86f4-4cd8-a92c-09458b27aba3" />
+
 
 ---
 
