@@ -143,7 +143,7 @@ I created the target VMs and connected them to the same 10.0.0.0/24 network.
 
 **Windows 10 :** attached to NatNetwork1, received 10.0.0.4 with 10.0.0.1 as the gateway.
 
-![Windows 10 VM 1](windows_10_config.png)
+![Windows 10 (windows_10_config.png)
 
 **Android VM:** connected through the virtual Wi-Fi network (VirtWifi), received 10.0.0.5 with 10.0.0.1 as the gateway.
 
