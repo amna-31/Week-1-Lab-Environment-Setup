@@ -1,4 +1,4 @@
-# Cybersecurity Lab Setup: Kali Linux, Windows 10 and Android on VirtualBox
+# Cybersecurity Lab Setup
 
 A private virtual lab for practicing network security and penetration testing in a safe, repeatable environment.
 
